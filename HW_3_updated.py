@@ -25,20 +25,20 @@ def count_whitespaces(text):
 # normalize the text and correct "iz"
 def normalization (text):
     chars_to_replace = {' iz ': ' is ','\n\n\n': '',':\n': ':'}
-    for key, value in chars_to_replace.items():
-        text = text.lower().replace(key, value)
+    for old_value, new_value in chars_to_replace.items():
+        text = text.lower().replace(old_value, new_value)
     text_corrected = re.sub("(^|[.:])\s*([a-zA-Z])", lambda p: p.group(0).upper(), text)
     print(text_corrected)
     return text_corrected
 
 # add words
 def add_sentence(text_corrected):
-    a = text_corrected.split()
-    for element in a:
-        if element.endswith(':'):
-            text_corrected = text_corrected + ' ' + element[:-1]
-        elif element.endswith('.'):
-            text_corrected = text_corrected + ' ' + element[:-1]
+    words = text_corrected.split()
+    for word in words:
+        if word.endswith(':'):
+            text_corrected = text_corrected + ' ' + word[:-1]
+        elif word.endswith('.'):
+            text_corrected = text_corrected + ' ' + word[:-1]
     print(text_corrected)
     return text_corrected
 
