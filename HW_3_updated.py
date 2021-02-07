@@ -46,4 +46,4 @@ def add_sentence(text_corrected):
 if __name__=='__main__':
     count_whitespaces(text)
     text_corrected = normalization (text)
-    add_sentence(text_corrected)
+    text_corrected = add_sentence(text_corrected)
