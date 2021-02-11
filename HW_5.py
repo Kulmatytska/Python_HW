@@ -1,82 +1,81 @@
 import datetime
 import random
+import datefinder
 
-# input_versions = ('1', '2', '3')
-# response = input('Enter the topic you are interested in:\n1 for news\n2 for privat_adv\n3 for consideration \n:')
-# while response not in input_versions:
-#     print('Please select correct topic:')
-#     response = input('news\n privat_adv\n consideration \n:')
-#
-# print('lets start')
-# with open('news.txt', "a") as file:
-#     if response == '1':
-#         text = input('Describe, what has happened\n: ')
-#         news_location = input('Where it has happened\n: ')
-#         date = datetime.datetime.today()
-#         file.write(f'News -------------------------\n{text}\n{news_location},{date}\n------------------------------\n\n')
-#
-#     elif response == '2':
-#         text = input('Type your adv here\n: ')
-#         expiration_date = date(input('Till what date do you want to keep it published?\n: '))
-#         date = datetime.datetime.today()
-#         file.write(f'Privat_adv -------------------------\n{text}\nActual until{expiration_date},{expiration_date - date}days left\n------------------------------\n\n')
-
-#     else:
-#         text = input('Type your consideration here\n: ')
-#         score = random.randint(1, 100)
-#         file.write(f'Consideration -------------------------\n{text}\nProbability of truth: {score} %\n------------------------------\n\n')
-
-input_versions = ('1', '2', '3')
-response = input('Enter the topic you are interested in:\n1 for news\n2 for privat_adv\n3 for consideration \n:')
-while response not in input_versions:
-    print('Please select correct topic:')
-    response = input('\n1 for news\n2 for privat_adv\n3 for consideration \n:')
-
-
-class News:
-    def __init__(self, response):
-        self.responce = response
-
-    def get_text(self):
+class Article:
+    def __init__(self, header, text):
+        self.header = header
         self.text = text
 
-    def get_news_location(self):
-        self.news_location = input('Where it has happened\n: ')
-
-    def get_current_date(self):
-        self.current_date = datetime.datetime.today()
+    def print_to_file(self):
+        with open('news.txt', "a") as file:
+            file.write(f'{self.header} --------------------\n{self.text}\n')
 
 
-class PrivatAdv(News):
-    def __init__(self, response):
-        News.__init__(self, response=response)
+class News(Article):
+    def __init__(self, header, text, location):
+        Article.__init__(self, header=header, text=text )
+        self.location = location
 
-    def get_text(self):
-        self.text = input('Type your adv here\n: ')
-
-    def get_expiration_date(self):
-        self.expiration_date = datetime.date(input('Till what date do you want to keep it published?\n: '))
-
-
-class Consideration(News):
-    def __init__(self, response):
-        News.__init__(self, response=response)
-
-    def get_score(self):
-        self.score = random.randint(1, 100)
-
-    def get_text(self):
-        self.text = input('What would you like to ask?\n: ')
-
-article = News(response=response)
-advertisement = PrivatAdv(response=response)
-probability = Consideration(response=response)
+    def print_location(self):
+        with open('news.txt', "a") as file:
+            file.write(f'{self.location}, {datetime.datetime.today().strftime("%d/%m/%Y %H.%M")}\n------------------------------\n\n')
 
 
-with open('news.txt', "a") as file:
-    if response == '1':
-        file.write(f'News -------------------------\n{article.get_text()}\n{article.get_news_location()},{datetime.datetime.today()}\n------------------------------\n\n')
-    elif response == '2':
-        file.write(f'Privat_adv -------------------------\n{advertisement.get_text()}\nActual until{advertisement.get_expiration_date()},{advertisement.get_expiration_date() - datetime.datetime.today()}days left\n------------------------------\n\n')
-    else:
-        file.write(f'Consideration -------------------------\n{probability.get_text()}\nProbability of truth: {probability.get_score()} %\n------------------------------\n\n')
+class PrivatAdv(Article):
+    def __init__(self, header, text, expiration_date):
+        Article.__init__(self, header=header, text=text )
+        self.expiration_date = expiration_date
+
+    def print_expiration_date(self):
+        with open('news.txt', "a") as file:
+            file.write(f'Actual until {self.expiration_date.strftime("%d/%m/%Y")}, {(self.expiration_date - datetime.date.today()).days} days left.\n------------------------------\n\n')
+
+class Consideration(Article):
+    def __init__(self, header, text, score):
+        Article.__init__(self, header=header, text=text )
+        self.score = score
+
+    def print_score(self):
+        with open('news.txt', "a") as file:
+            file.write(f'Probability of truth: {self.score} %\n------------------------------\n\n')
+
+def write_article():
+    input_versions = ('News', 'PrivatAdv', 'Consideration')
+    header = input('Enter the topic you are interested in:\nNews\nPrivatAdv\nConsideration\n:')
+
+    while header not in input_versions:
+        print('Please select correct topic:')
+        header = input('News\nPrivatAdv\nConsideration\n:')
+    text = input('Type your text here\n:')
+
+    if header == 'News':
+        location = input('Enter location \n:')
+        story = News(header, text, location)
+        story.print_to_file()
+        story.print_location()
+    elif header == 'PrivatAdv':
+        expiration_date = input('Till what date we should keep it?\nPlease follow DD-MM-YYYY date version:')
+        try:
+            expiration_date = list(datefinder.find_dates(expiration_date))[0].date()
+        except:
+            answer = input('Enter correct date\nPlease follow DD-MM-YYYY date version:')
+        advertisement = PrivatAdv(header, text, expiration_date)
+        advertisement.print_to_file()
+        advertisement.print_expiration_date()
+    elif header == 'Consideration':
+        game = Consideration(header, text, random.randint(1, 100))
+        game.print_to_file()
+        game.print_score()
+    another_article = input('Do you want to publish something else? Y/N:')
+    return another_article
+
+
+if __name__=='__main__':
+    another_article = write_article()
+    if another_article == 'Y':
+        write_article()
+    elif another_article == 'N':
+        pass
+
+
