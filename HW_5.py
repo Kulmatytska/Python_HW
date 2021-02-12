@@ -54,8 +54,7 @@ def write_article():
         story = News(header, text, location)
         story.print_to_file()
     elif header == 'PrivatAdv':
-        expiration_date = input('Till what date we should keep it?\nPlease follow DD-MM-YYYY date version:')
-        expiration_date = list(datefinder.find_dates(expiration_date))[0].date()
+        expiration_date = list(datefinder.find_dates(input('Till what date we should keep it?\nPlease follow DD-MM-YYYY date version:')))[0].date()
         advertisement = PrivatAdv(header, text, expiration_date)
         advertisement.print_to_file()
     elif header == 'Consider':
