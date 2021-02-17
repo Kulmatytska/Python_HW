@@ -1,0 +1,74 @@
+
+
+News--------------
+Something happened
+plus line for check
+Default location,17/02/2021 19.05
+-------------------
+
+News--------------
+Something else happened
+Default location,17/02/2021 19.05
+-------------------
+
+News--------------
+Another event
+Must be interesting
+Default location,17/02/2021 19.05
+-------------------
+
+News--------------
+Something happened
+plus line for check
+Default location,17/02/2021 19.09
+-------------------
+
+News--------------
+Something else happened
+Default location,17/02/2021 19.09
+-------------------
+
+News--------------
+Another event
+Must be interesting
+Default location,17/02/2021 19.09
+-------------------
+
+PrivatAdv----------
+I sell my byke.
+I call it Basia
+Actual until: 2021-02-17, 0 days left.
+-----------------------
+
+PrivatAdv----------
+Looking for a babysitter
+Actual until: 2021-02-17, 0 days left.
+-----------------------
+
+PrivatAdv----------
+I sell my byke.
+I call it Basia
+Actual until: 2021-02-17, 0 days left.
+-----------------------
+
+PrivatAdv----------
+Looking for a babysitter
+Actual until: 2021-02-17, 0 days left.
+-----------------------
+
+Consider-------------- 
+The summer will start tomorrow
+Probability of truth:44%
+------------------------------
+
+Consider-------------- 
+I'm gonna fly
+Probability of truth:68%
+------------------------------
+
+Consider-------------- 
+Work is the best way
+to solve a problem.
+Probability of truth:62%
+------------------------------
+
