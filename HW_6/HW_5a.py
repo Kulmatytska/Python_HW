@@ -4,9 +4,11 @@ import random
 import datefinder
 import HW_3_updated as normalization
 import sys, os
+import csv
+import re
+from collections import Counter
 
 sys.path.append('C:\\Users\\Kateryna_Kulmatytska\\PycharmProjects\\Python_HW\\HW_6')
-
 
 class Article:
     def __init__(self, header, text):
@@ -16,6 +18,35 @@ class Article:
     def print_to_file(self, formatted_text, file_name):
         with open(file_name, "a") as file:
             file.write(formatted_text)
+            with open(file_name, "r") as file_updated:
+                content = file_updated.read()
+                words = re.findall(r"[\w']+", content.lower())
+                d = dict()
+                for word in words:
+                    if word.isalpha():
+                        if word in d:
+                            d[word] = d[word] + 1
+                        else:
+                            d[word] = 1
+                with open('words_count.csv', "w", newline='') as words_count_file:
+                    for key, value in d.items():
+                        writer = csv.writer(words_count_file, delimiter='-')
+                        writer.writerow([f'{key}', f'{value}'])
+
+                with open('letters_count.csv', "w", newline='') as letters_count_file:
+                    headers = ['Letter', 'Count_all', 'Count_uppercase', 'Percentage']
+                    writer = csv.DictWriter(letters_count_file,  fieldnames=headers)
+                    writer.writeheader()
+                    letters_lowercase = Counter(letter for line in content
+                                      for letter in line.lower()
+                                      if letter.isalpha())
+                    letters_general = Counter(letter for line in content
+                                      for letter in line
+                                      if letter.isalpha())
+                    letters_total = len(re.findall("[a-zA-Z]", content))
+                    for letter, values in letters_lowercase.items():
+                        writer.writerow({f'Letter': letter, f'Count_all': letters_lowercase.get(letter), f'Count_uppercase': letters_general.get(letter.upper()),
+                                         f'Percentage': round((letters_lowercase.get(letter) / letters_total *100),2)})
 
 
 class News(Article):
@@ -26,7 +57,7 @@ class News(Article):
     def format_text(self, header, text, location):
         return f"{header}--------------" \
                f"\n{text}\n" \
-               f"{location},{datetime.datetime.today().strftime('%d/%m/%Y %H.%M')}" \
+               f"{location}, {datetime.datetime.today().strftime('%d/%m/%Y %H.%M')}" \
                f"\n-------------------\n\n"
 
 
@@ -50,7 +81,7 @@ class Consider(Article):
     def format_text(self, header, text, score):
         return f"{header}-------------- " \
                f"\n{text}\n" \
-               f"Probability of truth:{score}%" \
+               f"Probability of truth: {score}%" \
                f"\n------------------------------\n\n"
 
 
