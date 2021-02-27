@@ -72,3 +72,196 @@ to solve a problem.
 Probability of truth:62%
 ------------------------------
 
+News--------------
+A
+a, 23/02/2021 16.01
+-------------------
+
+News--------------
+Something happened
+plus line for check
+Default location, 27/02/2021 16.13
+-------------------
+
+News--------------
+Something else happened
+Default location, 27/02/2021 16.13
+-------------------
+
+News--------------
+Another event
+Must be interesting
+Default location, 27/02/2021 16.13
+-------------------
+
+News--------------
+text
+Default location, 27/02/2021 16.29
+-------------------
+
+News--------------
+text
+Default location, 27/02/2021 16.30
+-------------------
+
+News--------------
+text
+Default location, 27/02/2021 16.32
+-------------------
+
+News--------------
+Something happened
+plus line for check
+Default location, 27/02/2021 16.38
+-------------------
+
+News--------------
+Something else happened
+Default location, 27/02/2021 16.38
+-------------------
+
+News--------------
+Another event
+Must be interesting
+Default location, 27/02/2021 16.38
+-------------------
+
+News--------------
+Test news from json file
+Default location, 27/02/2021 16.46
+-------------------
+
+
+News--------------
+Test news from json file
+Default location, 27/02/2021 16.50
+-------------------
+
+News--------------
+Test news to check bulk load
+Default location, 27/02/2021 16.50
+-------------------
+
+News--------------
+Something happened
+Default location, 27/02/2021 16.50
+-------------------
+
+News--------------
+Test news from json file
+Default location, 27/02/2021 16.50
+-------------------
+
+PrivatAdv----------
+Test adv from json
+Actual until: 2021-02-27, 0 days left.
+-----------------------
+
+PrivatAdv----------
+Test news to check bulk load advs
+Actual until: 2021-02-27, 0 days left.
+-----------------------
+
+PrivatAdv----------
+I sell my home
+Actual until: 2021-02-27, 0 days left.
+-----------------------
+
+PrivatAdv----------
+Test adv from json file
+Actual until: 2021-02-27, 0 days left.
+-----------------------
+
+
+Consider-------------- 
+Test consider from json
+Probability of truth: 51%
+------------------------------
+
+Consider-------------- 
+Test consider to check bulk load
+Probability of truth: 97%
+------------------------------
+
+Consider-------------- 
+Is it a good HW?
+Probability of truth: 5%
+------------------------------
+
+Consider-------------- 
+Test consider from json file
+Probability of truth: 27%
+------------------------------
+
+Consider-------------- 
+The summer will start tomorrow
+Probability of truth: 79%
+------------------------------
+
+Consider-------------- 
+I'm gonna fly
+Probability of truth: 63%
+------------------------------
+
+Consider-------------- 
+Work is the best way
+to solve a problem.
+Probability of truth: 100%
+------------------------------
+
+Consider-------------- 
+Test consider from json
+Probability of truth: 46%
+------------------------------
+
+Consider-------------- 
+Test consider to check bulk load
+Probability of truth: 26%
+------------------------------
+
+Consider-------------- 
+Is it a good HW?
+Probability of truth: 69%
+------------------------------
+
+Consider-------------- 
+Test consider from json file
+Probability of truth: 3%
+------------------------------
+
+Consider-------------- 
+Test consider from json
+Probability of truth: 84%
+------------------------------
+
+Consider-------------- 
+Test consider to check bulk load
+Probability of truth: 88%
+------------------------------
+
+Consider-------------- 
+Is it a good HW?
+Probability of truth: 57%
+------------------------------
+
+Consider-------------- 
+Test consider from json file
+Probability of truth: 81%
+------------------------------
+
+Consider-------------- 
+The summer will start tomorrow
+Probability of truth: 24%
+------------------------------
+
+Consider-------------- 
+I'm gonna fly
+Probability of truth: 78%
+------------------------------
+
+Consider-------------- 
+Work is the best way
+to solve a problem.
+Probability of truth: 60%
+------------------------------
+

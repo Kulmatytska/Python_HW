@@ -7,6 +7,7 @@ import sys, os
 import csv
 import re
 from collections import Counter
+import json
 
 sys.path.append('C:\\Users\\Kateryna_Kulmatytska\\PycharmProjects\\Python_HW\\HW_6')
 
@@ -105,11 +106,21 @@ def write_article():
     text = normalization.normalization(input_text)
     if header == 'News':
         if len(text) == 0:
+            file_choise = input('Shall I use csv or json file? Answer: json/csv\n:')
             user_input = input("Enter the path of your file: ")
             if os.path.exists(user_input):
-                input_file = open(user_input, 'r+')
+                 input_file = open(user_input, 'r+')
             else:
-                print("I did not find the file at, " + str(user_input) + " I'll use mine")
+                print("I did not find the file at, " + str(user_input) + " I'll use mine " + file_choise)
+            if file_choise == 'json':
+                input_file = open('default_news.json', "r")
+                parsed_text_json = json.load(input_file)
+                for i in parsed_text_json:
+                    text = i["text"]
+                    location = 'Default location'
+                    story = News(header, text, location)
+                    story.print_to_file(story.format_text(header, text, location), 'sum_news.txt')
+            elif file_choise == 'csv':
                 input_file = open('default_news.txt', "r")
                 parsed_text = input_file.read().split('\n\n')
                 for i in parsed_text:
@@ -125,18 +136,29 @@ def write_article():
             story.print_to_file(story.format_text(header, text, location), 'sum_news.txt')
     elif header == 'PrivatAdv':
         if len(text) == 0:
+            file_choise = input('Shall I use csv or json file? Answer: json/csv\n:')
             user_input = input("Enter the path of your file: ")
             if os.path.exists(user_input):
                 input_file = open(user_input, 'r+')
             else:
                 print("I did not find the file at, " + str(user_input) + "I'll use mine")
-                input_file = open('default_advs.txt', "r")
-                parsed_text = input_file.read().split('\n\n')
-                for i in parsed_text:
-                    text = i[0:]
-                    expiration_date = datetime.date.today()
-                    advertisement = PrivatAdv(header, text, expiration_date)
-                    advertisement.print_to_file(advertisement.format_text(header, text, expiration_date),
+                if file_choise == 'json':
+                    input_file = open('default_advs.json', "r")
+                    parsed_text_json = json.load(input_file)
+                    for i in parsed_text_json:
+                        text = i["text"]
+                        expiration_date = datetime.date.today()
+                        advertisement = PrivatAdv(header, text, expiration_date)
+                        advertisement.print_to_file(advertisement.format_text(header, text, expiration_date),
+                                                    'sum_news.txt')
+                elif file_choise == 'csv':
+                    input_file = open('default_advs.txt', "r")
+                    parsed_text = input_file.read().split('\n\n')
+                    for i in parsed_text:
+                        text = i[0:]
+                        expiration_date = datetime.date.today()
+                        advertisement = PrivatAdv(header, text, expiration_date)
+                        advertisement.print_to_file(advertisement.format_text(header, text, expiration_date),
                                                 'sum_news.txt')
             input_file.close()
             os.remove('default_advs.txt')
@@ -147,18 +169,28 @@ def write_article():
             advertisement.print_to_file(advertisement.format_text(header, text, expiration_date), 'sum_news.txt')
     elif header == 'Consider':
         if len(text) == 0:
+            file_choise = input('Shall I use csv or json file? Answer: json/csv\n:')
             user_input = input("Enter the path of your file: ")
             if os.path.exists(user_input):
                 input_file = open(user_input, 'r+')
             else:
                 print("I did not find the file at, " + str(user_input) + "I'll use mine")
-                input_file = open('default_considers.txt', "r")
-                parsed_text = input_file.read().split('\n\n')
-                for i in parsed_text:
-                    text = i[0:]
-                    score = random.randint(1, 100)
-                    game = Consider(header, text, score)
-                    game.print_to_file(game.format_text(header, text, score), 'sum_news.txt')
+                if file_choise == 'json':
+                    input_file = open('default_considers.json', "r")
+                    parsed_text_json = json.load(input_file)
+                    for i in parsed_text_json:
+                        text = i["text"]
+                        score = random.randint(1, 100)
+                        game = Consider(header, text, score)
+                        game.print_to_file(game.format_text(header, text, score), 'sum_news.txt')
+                if file_choise == 'csv':
+                    input_file = open('default_considers.txt', "r")
+                    parsed_text = input_file.read().split('\n\n')
+                    for i in parsed_text:
+                        text = i[0:]
+                        score = random.randint(1, 100)
+                        game = Consider(header, text, score)
+                        game.print_to_file(game.format_text(header, text, score), 'sum_news.txt')
             input_file.close()
             os.remove('default_considers.txt')
         else:
