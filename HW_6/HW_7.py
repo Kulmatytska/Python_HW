@@ -1,4 +1,3 @@
-
 import datetime
 import random
 import datefinder
@@ -11,11 +10,11 @@ import json
 
 sys.path.append('C:\\Users\\Kateryna_Kulmatytska\\PycharmProjects\\Python_HW\\HW_6')
 
+
 class Article:
     def __init__(self, header, text):
         self.header = header
         self.text = text
-
 
     def print_to_file(self, formatted_text, file_name):
         with open(file_name, "a") as file:
@@ -37,18 +36,20 @@ class Article:
 
                 with open('letters_count.csv', "w", newline='') as letters_count_file:
                     headers = ['Letter', 'Count_all', 'Count_uppercase', 'Percentage']
-                    writer = csv.DictWriter(letters_count_file,  fieldnames=headers)
+                    writer = csv.DictWriter(letters_count_file, fieldnames=headers)
                     writer.writeheader()
                     letters_lowercase = Counter(letter for line in content
-                                      for letter in line.lower()
-                                      if letter.isalpha())
+                                                for letter in line.lower()
+                                                if letter.isalpha())
                     letters_general = Counter(letter for line in content
-                                      for letter in line
-                                      if letter.isalpha())
+                                              for letter in line
+                                              if letter.isalpha())
                     letters_total = len(re.findall("[a-zA-Z]", content))
                     for letter, values in letters_lowercase.items():
-                        writer.writerow({f'Letter': letter, f'Count_all': letters_lowercase.get(letter), f'Count_uppercase': letters_general.get(letter.upper()),
-                                         f'Percentage': round((letters_lowercase.get(letter) / letters_total *100),2)})
+                        writer.writerow({f'Letter': letter, f'Count_all': letters_lowercase.get(letter),
+                                         f'Count_uppercase': letters_general.get(letter.upper()),
+                                         f'Percentage': round((letters_lowercase.get(letter) / letters_total * 100),
+                                                              2)})
 
 
 class News(Article):
@@ -60,7 +61,7 @@ class News(Article):
         return f"{header}--------------" \
                f"\n{text}\n" \
                f"{location}, {datetime.datetime.today().strftime('%d/%m/%Y %H.%M')}" \
-               f"\n-------------------\n\n"
+               f"\n{'-' * 23}\n\n"
 
 
 class PrivatAdv(Article):
@@ -72,7 +73,7 @@ class PrivatAdv(Article):
         return f"{header}----------" \
                f"\n{text}\n" \
                f"Actual until: {expiration_date}, {(expiration_date - datetime.date.today()).days} days left." \
-               f"\n-----------------------\n\n"
+               f"\n{'-' * 23}\n\n"
 
 
 class Consider(Article):
@@ -84,16 +85,19 @@ class Consider(Article):
         return f"{header}-------------- " \
                f"\n{text}\n" \
                f"Probability of truth: {score}%" \
-               f"\n------------------------------\n\n"
+               f"\n{'-' * 23}\n\n"
+
 
 def get_header():
-    input_versions = ('News', 'PrivatAdv', 'Consider')
-    header = input('Enter the topic you are interested in:\nNews\nPrivatAdv\nConsider\n:')
+    input_versions = ['News', 'PrivatAdv', 'Consider']
+    while True:
+        header = input(f"Enter the topic you are interested in: {', '.join(input_versions)}\n")
+        if header not in input_versions:
+            print('Please select correct topic')
+        else:
+            break
+        return header
 
-    while header not in input_versions:
-        print('Please select correct topic:')
-        header = input('News\nPrivatAdv\nConsider\n:')
-    return header
 
 def get_text():
     print("Type your text here. Press Enter twice to exit from text adding mode")
@@ -108,6 +112,7 @@ def get_text():
     text = normalization.normalization(input_text)
     return text
 
+
 def check_text(file_choise):
     user_input = input("Enter the path of your file: ")
     if os.path.exists(user_input):
@@ -120,6 +125,7 @@ def check_text(file_choise):
     else:
         print("I did not find the file at, " + str(user_input) + " I'll use mine ")
         return False
+
 
 def parse_file(file_choise, file_txt, file_json):
     text_list = []
@@ -145,7 +151,7 @@ def write_article():
         if len(text) == 0:
             file_choise = input('Shall I use txt or json file? Answer: json/txt\n:')
             if not check_text(file_choise):
-                text_list = parse_file(file_choise, 'default_news.txt', 'default_news.json' )
+                text_list = parse_file(file_choise, 'default_news.txt', 'default_news.json')
                 for text in text_list:
                     location = 'Default location'
                     story = News(header, text, location)
@@ -166,21 +172,30 @@ def write_article():
         if len(text) == 0:
             file_choise = input('Shall I use txt or json file? Answer: json/txt\n:')
             if not check_text(file_choise):
-                text_list = parse_file(file_choise, 'default_advs.txt', 'default_advs.json' )
+                text_list = parse_file(file_choise, 'default_advs.txt', 'default_advs.json')
                 for text in text_list:
                     expiration_date = datetime.date.today()
                     advertisement = PrivatAdv(header, text, expiration_date)
-                    advertisement.print_to_file(advertisement.format_text(header, text, expiration_date),'sum_news.txt')
+                    advertisement.print_to_file(advertisement.format_text(header, text, expiration_date),
+                                                'sum_news.txt')
             else:
                 file_txt = check_text(file_choise)
                 file_json = check_text(file_choise)
                 text_list = parse_file(file_choise, file_txt, file_json)
                 for text in text_list:
-                    expiration_date = list(datefinder.find_dates(input('Till what date we should keep it?\nPlease follow DD-MM-YYYY date version:')))[0].date()
-                    advertisement = PrivatAdv(header, text, expiration_date)
-                    advertisement.print_to_file(advertisement.format_text(header, text, expiration_date), 'sum_news.txt')
+                    while True:
+                        try:
+                            expiration_date = list(datefinder.find_dates(
+                                input('Till what date we should keep it?\nPlease follow DD-MM-YYYY date version:')))[
+                                0].date()
+                            advertisement = PrivatAdv(header, text, expiration_date)
+                            advertisement.print_to_file(advertisement.format_text(header, text, expiration_date),
+                                                        'sum_news.txt')
+                        except:
+                            print("The date is not valid. Try again")
         else:
-            expiration_date = list(datefinder.find_dates(input('Till what date we should keep it?\nPlease follow DD-MM-YYYY date version:')))[0].date()
+            expiration_date = list(datefinder.find_dates(
+                input('Till what date we should keep it?\nPlease follow DD-MM-YYYY date version:')))[0].date()
             advertisement = PrivatAdv(header, text, expiration_date)
             advertisement.print_to_file(advertisement.format_text(header, text, expiration_date), 'sum_news.txt')
     elif header == 'Consider':
@@ -207,8 +222,11 @@ def write_article():
 
 
 if __name__ == '__main__':
-    write_article()
-    another_article = input('Do you want to publish something else? Y/N:')
-    while another_article != 'N':
-        write_article()
-        another_article = input('Do you want to publish something else? Y/N:')
+    while True:
+        user_input = input('Do you want to publish? Y/N:')
+        if user_input == 'Y':
+            write_article()
+        elif user_input == 'N':
+            break
+        else:
+            print("Incorrect input. Please type Y or N\n")
