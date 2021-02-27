@@ -16,6 +16,7 @@ class Article:
         self.header = header
         self.text = text
 
+
     def print_to_file(self, formatted_text, file_name):
         with open(file_name, "a") as file:
             file.write(formatted_text)
@@ -85,15 +86,16 @@ class Consider(Article):
                f"Probability of truth: {score}%" \
                f"\n------------------------------\n\n"
 
-
-def write_article():
+def get_header():
     input_versions = ('News', 'PrivatAdv', 'Consider')
     header = input('Enter the topic you are interested in:\nNews\nPrivatAdv\nConsider\n:')
 
     while header not in input_versions:
         print('Please select correct topic:')
         header = input('News\nPrivatAdv\nConsider\n:')
+    return header
 
+def get_text():
     print("Type your text here. Press Enter twice to exit from text adding mode")
     input_text = ''
     while True:
@@ -104,95 +106,100 @@ def write_article():
             input_text = input_text[:-1]
             break
     text = normalization.normalization(input_text)
+    return text
+
+def check_text(file_choise):
+    user_input = input("Enter the path of your file: ")
+    if os.path.exists(user_input):
+        if file_choise == 'json':
+            file_json = open(user_input, 'r+')
+            return True, file_json
+        elif file_choise == 'txt':
+            file_txt = open(user_input, 'r+')
+            return True, file_txt
+    else:
+        print("I did not find the file at, " + str(user_input) + " I'll use mine ")
+        return False
+
+def parse_file(file_choise, file_txt, file_json):
+    text_list = []
+    if file_choise == 'json':
+        input_file = open(file_json, "r")
+        parsed_text_json = json.load(input_file)
+        for i in parsed_text_json:
+            text_list.append(i["text"])
+    elif file_choise == 'txt':
+        input_file = open(file_txt, "r")
+        parsed_text = input_file.read().split('\n\n')
+        for i in parsed_text:
+            text_list.append(i[0:])
+        input_file.close()
+        os.remove(file_txt)
+    return text_list
+
+
+def write_article():
+    header = get_header()
+    text = get_text()
     if header == 'News':
         if len(text) == 0:
-            file_choise = input('Shall I use csv or json file? Answer: json/csv\n:')
-            user_input = input("Enter the path of your file: ")
-            if os.path.exists(user_input):
-                 input_file = open(user_input, 'r+')
+            file_choise = input('Shall I use txt or json file? Answer: json/txt\n:')
+            if not check_text(file_choise):
+                text_list = parse_file(file_choise, 'default_news.txt', 'default_news.json' )
+                for text in text_list:
+                    location = 'Default location'
+                    story = News(header, text, location)
+                    story.print_to_file(story.format_text(header, text, location), 'sum_news.txt')
             else:
-                print("I did not find the file at, " + str(user_input) + " I'll use mine " + file_choise)
-            if file_choise == 'json':
-                input_file = open('default_news.json', "r")
-                parsed_text_json = json.load(input_file)
-                for i in parsed_text_json:
-                    text = i["text"]
-                    location = 'Default location'
+                file_txt = check_text(file_choise)
+                file_json = check_text(file_choise)
+                text_list = parse_file(file_choise, file_txt, file_json)
+                for text in text_list:
+                    location = input('Enter location \n:')
                     story = News(header, text, location)
                     story.print_to_file(story.format_text(header, text, location), 'sum_news.txt')
-            elif file_choise == 'csv':
-                input_file = open('default_news.txt', "r")
-                parsed_text = input_file.read().split('\n\n')
-                for i in parsed_text:
-                    text = i[0:]
-                    location = 'Default location'
-                    story = News(header, text, location)
-                    story.print_to_file(story.format_text(header, text, location), 'sum_news.txt')
-            input_file.close()
-            os.remove('default_news.txt')
         else:
             location = input('Enter location \n:')
             story = News(header, text, location)
             story.print_to_file(story.format_text(header, text, location), 'sum_news.txt')
     elif header == 'PrivatAdv':
         if len(text) == 0:
-            file_choise = input('Shall I use csv or json file? Answer: json/csv\n:')
-            user_input = input("Enter the path of your file: ")
-            if os.path.exists(user_input):
-                input_file = open(user_input, 'r+')
+            file_choise = input('Shall I use txt or json file? Answer: json/txt\n:')
+            if not check_text(file_choise):
+                text_list = parse_file(file_choise, 'default_advs.txt', 'default_advs.json' )
+                for text in text_list:
+                    expiration_date = datetime.date.today()
+                    advertisement = PrivatAdv(header, text, expiration_date)
+                    advertisement.print_to_file(advertisement.format_text(header, text, expiration_date),'sum_news.txt')
             else:
-                print("I did not find the file at, " + str(user_input) + "I'll use mine")
-                if file_choise == 'json':
-                    input_file = open('default_advs.json', "r")
-                    parsed_text_json = json.load(input_file)
-                    for i in parsed_text_json:
-                        text = i["text"]
-                        expiration_date = datetime.date.today()
-                        advertisement = PrivatAdv(header, text, expiration_date)
-                        advertisement.print_to_file(advertisement.format_text(header, text, expiration_date),
-                                                    'sum_news.txt')
-                elif file_choise == 'csv':
-                    input_file = open('default_advs.txt', "r")
-                    parsed_text = input_file.read().split('\n\n')
-                    for i in parsed_text:
-                        text = i[0:]
-                        expiration_date = datetime.date.today()
-                        advertisement = PrivatAdv(header, text, expiration_date)
-                        advertisement.print_to_file(advertisement.format_text(header, text, expiration_date),
-                                                'sum_news.txt')
-            input_file.close()
-            os.remove('default_advs.txt')
+                file_txt = check_text(file_choise)
+                file_json = check_text(file_choise)
+                text_list = parse_file(file_choise, file_txt, file_json)
+                for text in text_list:
+                    expiration_date = list(datefinder.find_dates(input('Till what date we should keep it?\nPlease follow DD-MM-YYYY date version:')))[0].date()
+                    advertisement = PrivatAdv(header, text, expiration_date)
+                    advertisement.print_to_file(advertisement.format_text(header, text, expiration_date), 'sum_news.txt')
         else:
-            expiration_date = list(datefinder.find_dates(
-                input('Till what date we should keep it?\nPlease follow DD-MM-YYYY date version:')))[0].date()
+            expiration_date = list(datefinder.find_dates(input('Till what date we should keep it?\nPlease follow DD-MM-YYYY date version:')))[0].date()
             advertisement = PrivatAdv(header, text, expiration_date)
             advertisement.print_to_file(advertisement.format_text(header, text, expiration_date), 'sum_news.txt')
     elif header == 'Consider':
         if len(text) == 0:
-            file_choise = input('Shall I use csv or json file? Answer: json/csv\n:')
-            user_input = input("Enter the path of your file: ")
-            if os.path.exists(user_input):
-                input_file = open(user_input, 'r+')
+            file_choise = input('Shall I use txt or json file? Answer: json/txt\n:')
+            if not check_text(file_choise):
+                text_list = parse_file(file_choise, 'default_considers.txt', 'default_considers.json')
+                for text in text_list:
+                    score = random.randint(1, 100)
+                    game = Consider(header, text, score)
+                    game.print_to_file(game.format_text(header, text, score), 'sum_news.txt')
             else:
-                print("I did not find the file at, " + str(user_input) + "I'll use mine")
-                if file_choise == 'json':
-                    input_file = open('default_considers.json', "r")
-                    parsed_text_json = json.load(input_file)
-                    for i in parsed_text_json:
-                        text = i["text"]
-                        score = random.randint(1, 100)
-                        game = Consider(header, text, score)
-                        game.print_to_file(game.format_text(header, text, score), 'sum_news.txt')
-                if file_choise == 'csv':
-                    input_file = open('default_considers.txt', "r")
-                    parsed_text = input_file.read().split('\n\n')
-                    for i in parsed_text:
-                        text = i[0:]
-                        score = random.randint(1, 100)
-                        game = Consider(header, text, score)
-                        game.print_to_file(game.format_text(header, text, score), 'sum_news.txt')
-            input_file.close()
-            os.remove('default_considers.txt')
+                file_txt = check_text(file_choise)
+                file_json = check_text(file_choise)
+                text_list = parse_file(file_choise, file_txt, file_json)
+                for text in text_list:
+                    score = random.randint(1, 100)
+                    game = Consider(header, text, score)
+                    game.print_to_file(game.format_text(header, text, score), 'sum_news.txt')
         else:
             score = random.randint(1, 100)
             game = Consider(header, text, score)
