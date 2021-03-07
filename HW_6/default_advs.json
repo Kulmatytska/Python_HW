@@ -1,5 +1,5 @@
-[{"text":"Test adv from json"},
-  {"text":"Test adv to check bulk load"},
-  {"text":"I sell my home"},
-  {"text":"Test adv from json file"}
+[{"text":"Test adv from json", "attrib": "23-11-2021"},
+  {"text":"Test adv to check bulk load", "attrib":  "23-11-2021"},
+  {"text":"I sell my home", "attrib":  "19-03-2021"},
+  {"text":"Test adv from json file", "attrib":  "12-04-2021"}
 ]
