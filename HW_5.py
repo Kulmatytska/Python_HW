@@ -73,6 +73,7 @@ def write_article():
 
 
 if __name__ == '__main__':
+    # Please don't forget to create a pull request before merging to main
     write_article()
     another_article = input('Do you want to publish something else? Y/N:')
     while another_article != 'N':
