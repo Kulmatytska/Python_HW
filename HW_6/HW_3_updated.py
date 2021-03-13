@@ -27,7 +27,7 @@ def normalization (text):
     chars_to_replace = {' iz ': ' is ','\n\n\n': '',':\n': ':'}
     for old_value, new_value in chars_to_replace.items():
         text = text.lower().replace(old_value, new_value)
-    text_corrected = re.sub("(^|[.:])\s*([a-zA-Z])", lambda p: p.group(0).upper(), text)
+    text_corrected = re.sub("(^|[.:\n])\s*([a-zA-Z])", lambda p: p.group(0).upper(), text)
     print(text_corrected)
     return text_corrected
 
@@ -35,9 +35,7 @@ def normalization (text):
 def add_sentence(text_corrected):
     words = text_corrected.split()
     for word in words:
-        if word.endswith(':'):
-            text_corrected = text_corrected + ' ' + word[:-1]
-        elif word.endswith('.'):
+        if word.endswith(('.', ':')):
             text_corrected = text_corrected + ' ' + word[:-1]
     print(text_corrected)
     return text_corrected
