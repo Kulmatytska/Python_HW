@@ -1,0 +1,6 @@
+[
+  {"text":"Test news from json", "attrib": "Lviv"},
+  {"text":"Test news to check bulk load", "attrib": "Lviv"},
+  {"text":"Something happened", "attrib": "Lviv"},
+  {"text":"Test news from json file", "attrib": "Lviv"}
+]
